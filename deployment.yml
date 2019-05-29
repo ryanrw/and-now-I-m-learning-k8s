@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-app
+  labels:
+    app: hello-world-ts
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-world-ts
+  template:
+    metadata:
+      labels:
+        app: hello-world-ts
+    spec:
+      containers:
+        - name: hello-world-ts
+          image: willpower/hello_world_ts:latest
+          ports:
+            - containerPort: 8080
