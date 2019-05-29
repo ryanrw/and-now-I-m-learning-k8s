@@ -12,8 +12,7 @@ jobs:
       - run:
           name: test
           command: yarn test
-  build:
-      context: docker credential
+  build_docker_image:
       docker:
         - image: circleci/node
       steps:
@@ -37,8 +36,9 @@ workflows:
           filters:
             branches:
               only: master
-      - build:
-          required:
+      - build_docker_image:
+          context: docker credential
+          requires:
             - server_test
           filters:
             branches:
