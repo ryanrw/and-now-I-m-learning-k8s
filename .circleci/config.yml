@@ -1,0 +1,45 @@
+version: 2.1
+
+jobs:
+  server_test:
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - run:
+          name: install package
+          command: yarn install
+      - run:
+          name: test
+          command: yarn test
+  build:
+      context: docker credential
+      docker:
+        - image: circleci/node
+      steps:
+        - checkout
+        - setup_remote_docker
+        - run:
+            name: build docker image
+            command: docker build -t hello-world-ts .
+        - run:
+            name: login to docker hub
+            command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        - run:
+            name: push image
+            command: docker push hello-world-ts:latest
+
+workflows:
+  version: 2.1
+  build-master:
+    jobs:
+      - server_test:
+          filters:
+            branches:
+              only: master
+      - build:
+          required:
+            - server_test
+          filters:
+            branches:
+              only: master
