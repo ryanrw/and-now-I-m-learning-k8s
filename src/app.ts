@@ -7,12 +7,4 @@ server.get('/', (request, reply) => {
     reply.send('Hello, World!')
 })
 
-export default () => {
-    server.listen(8080, '0.0.0.0', (err, _) => {
-        if (err) {
-            console.log(err)
-            process.exit(1)
-        }
-        console.log('server started')
-    })
-}
+export default server
