@@ -13,6 +13,8 @@ jobs:
           name: test
           command: yarn test
   build_docker_image:
+      environment:
+        DOCKER_IMAGE_NAME: hello_world_ts
       docker:
         - image: circleci/node
       steps:
@@ -20,13 +22,16 @@ jobs:
         - setup_remote_docker
         - run:
             name: build docker image
-            command: docker build -t hello-world-ts .
+            command: docker build -t $DOCKER_IMAGE_NAME .
         - run:
             name: login to docker hub
             command: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
         - run:
+            name: add a docker tag to local image
+            command: docker tag $DOCKER_IMAGE_NAME:latest willpower/$DOCKER_IMAGE_NAME:latest
+        - run:
             name: push image
-            command: docker push willpower/hello-world-ts:latest
+            command: docker push willpower/$DOCKER_IMAGE_NAME:latest
 
 workflows:
   version: 2.1
