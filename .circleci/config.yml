@@ -23,10 +23,10 @@ jobs:
             command: docker build -t hello-world-ts .
         - run:
             name: login to docker hub
-            command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            command: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
         - run:
             name: push image
-            command: docker push hello-world-ts:latest
+            command: docker push willpower/hello-world-ts:latest
 
 workflows:
   version: 2.1
