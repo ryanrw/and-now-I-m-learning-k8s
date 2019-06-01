@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  gcp-gke: circleci/gcp-gke@0.1.0
+
 jobs:
   server_test:
     docker:
@@ -16,22 +19,38 @@ jobs:
       environment:
         DOCKER_IMAGE_NAME: hello_world_ts
       docker:
-        - image: circleci/node
+        - image: google/cloud-sdk
       steps:
         - checkout
-        - setup_remote_docker
+        - run:
+            name: decode pre-environment data to json file.
+            command: echo $GCLOUD_SERVICE_KEY | base64 --decode > /tmp/gcloud-key.json
+        - run:
+            name: authenticate with json key file.
+            command: |
+              gcloud auth activate-service-account --key-file /tmp/gcloud-key.json
+              gcloud config set project $GCP_PROJECT_NAME
+              gcloud config set compute/zone asia-southeast1-a
         - run:
             name: build docker image
-            command: docker build -t $DOCKER_IMAGE_NAME .
+            command: gcloud docker build -t $DOCKER_IMAGE_NAME .
         - run:
-            name: login to docker hub
-            command: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+            name: get version from package.json
+            command: |
+              export PACKAGE_VERSION=$( \
+              cat package.json | \
+              grep version | \
+              cut -d " " -f 4 | \
+              sed 's/[",]//g')
         - run:
             name: add a docker tag to local image
-            command: docker tag $DOCKER_IMAGE_NAME:latest willpower/$DOCKER_IMAGE_NAME:latest
+            command: |
+              gcloud docker tag \
+              $DOCKER_IMAGE_NAME:latest \
+              gcr.io/$GCP_PROJECT_NAME/hello-world-ts:$PACKAGE_VERSION
         - run:
             name: push image
-            command: docker push willpower/$DOCKER_IMAGE_NAME:latest
+            command: gcloud docker push gcr.io/$GCP_PROJECT_NAME/hello-world-ts:$PACKAGE_VERSION
 
 workflows:
   version: 2
@@ -42,7 +61,7 @@ workflows:
             branches:
               only: master
       - build_docker_image:
-          context: docker credential
+          context: gcloud credential
           requires:
             - server_test
           filters:
