@@ -22,6 +22,7 @@ jobs:
         - image: google/cloud-sdk
       steps:
         - checkout
+        - setup_remote_docker
         - run:
             name: decode pre-environment data to json file.
             command: echo $GCLOUD_SERVICE_KEY | base64 --decode > /tmp/gcloud-key.json
@@ -33,7 +34,7 @@ jobs:
               gcloud config set compute/zone asia-southeast1-a
         - run:
             name: build docker image
-            command: gcloud docker build -t $DOCKER_IMAGE_NAME .
+            command: docker build -t $DOCKER_IMAGE_NAME .
         - run:
             name: get version from package.json
             command: |
