@@ -1,7 +1,4 @@
-version: 2.1
-
-orbs:
-  gcp-gke: circleci/gcp-gke@0.1.0
+version: 2
 
 jobs:
   server_test:
@@ -46,12 +43,12 @@ jobs:
         - run:
             name: add a docker tag to local image
             command: |
-              gcloud docker tag \
+              docker tag \
               $DOCKER_IMAGE_NAME:latest \
               gcr.io/$GCP_PROJECT_NAME/hello-world-ts:$PACKAGE_VERSION
         - run:
             name: push image
-            command: gcloud docker push gcr.io/$GCP_PROJECT_NAME/hello-world-ts:$PACKAGE_VERSION
+            command: docker push gcr.io/$GCP_PROJECT_NAME/hello-world-ts:$PACKAGE_VERSION
 
 workflows:
   version: 2
