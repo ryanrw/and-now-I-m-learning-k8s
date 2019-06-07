@@ -36,6 +36,7 @@ jobs:
             name: get version from package.json
             command: |
               echo 'export PACKAGE_VERSION=$(cat package.json | grep version | cut -d " " -f 4 | sed 's/[",]//g')' >> $BASH_ENV
+              source $BASH_ENV
         - run:
             name: add a docker tag to local image
             command: |
