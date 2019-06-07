@@ -46,10 +46,10 @@ jobs:
             command: |
               docker tag \
               $DOCKER_IMAGE_NAME:latest \
-              gcr.io/$GCP_PROJECT_NAME/hello-world-ts:${PACKAGE_VERSION}
+              gcr.io/$GCP_PROJECT_ID/hello-world-ts:${PACKAGE_VERSION}
         - run:
             name: push image
-            command: docker push gcr.io/$GCP_PROJECT_NAME/hello-world-ts:${PACKAGE_VERSION}
+            command: docker push gcr.io/$GCP_PROJECT_ID/hello-world-ts:${PACKAGE_VERSION}
 
 workflows:
   version: 2
