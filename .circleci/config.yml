@@ -35,20 +35,16 @@ jobs:
         - run:
             name: get version from package.json
             command: |
-              export PACKAGE_VERSION=$( \
-              cat package.json | \
-              grep version | \
-              cut -d " " -f 4 | \
-              sed 's/[",]//g')
+              echo 'export PACKAGE_VERSION=$(cat package.json | grep version | cut -d " " -f 4 | sed 's/[",]//g')' >> $BASH_ENV
         - run:
             name: add a docker tag to local image
             command: |
               docker tag \
               $DOCKER_IMAGE_NAME:latest \
-              gcr.io/$GCP_PROJECT_NAME/hello-world-ts:$PACKAGE_VERSION
+              gcr.io/$GCP_PROJECT_NAME/hello-world-ts:${PACKAGE_VERSION}
         - run:
             name: push image
-            command: docker push gcr.io/$GCP_PROJECT_NAME/hello-world-ts:$PACKAGE_VERSION
+            command: docker push gcr.io/$GCP_PROJECT_NAME/hello-world-ts:${PACKAGE_VERSION}
 
 workflows:
   version: 2
