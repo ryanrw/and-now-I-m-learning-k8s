@@ -28,8 +28,7 @@ metadata:
     app: hello-world-ts
 spec:
   selector:
-    name: test-app
-    labels:
+    matchLabels:
       app: hello-world-ts
   ports:
     - port: 80
