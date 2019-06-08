@@ -59,10 +59,11 @@ jobs:
             gcloud auth activate-service-account --key-file /tmp/gcloud-key.json
             gcloud --quiet config set project $GCP_PROJECT_NAME
             gcloud --quiet config set compute/zone asia-southeast1-a
+            gcloud --quiet container clusters get-credentials test-cluster
       - run:
           name: apply deployment and service
           command: |
-            kubectl --insecure-skip-tls-verify apply -f deployment.yml
+            kubectl --insecure-skip-tls-verify apply -f ./deployment.yml
             kubectl rollout status deployment/hello_world_ts
       
 workflows:
