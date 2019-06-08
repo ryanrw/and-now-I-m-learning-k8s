@@ -64,7 +64,7 @@ jobs:
           name: apply deployment and service
           command: |
             kubectl --insecure-skip-tls-verify apply -f ./deployment.yml
-            kubectl rollout status deployment/hello-world-ts
+            kubectl rollout status deployment/test-app
       
 workflows:
   version: 2
