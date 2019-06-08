@@ -3,19 +3,19 @@ kind: Deployment
 metadata:
   name: test-app
   labels:
-    app: hello_world_ts
+    app: hello-world-ts
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: hello_world_ts
+      app: hello-world-ts
   template:
     metadata:
       labels:
-        app: hello_world_ts
+        app: hello-world-ts
     spec:
       containers:
-        - name: hello_world_ts
+        - name: hello-world-ts
           image: gcr.io/test-project-242015/hello_world_ts
           ports:
             - containerPort: 8080
@@ -25,14 +25,14 @@ kind: Service
 metadata: 
   name: test-app
   labels:
-    app: hello_world_ts
+    app: hello-world-ts
 spec:
   selector:
     name: test-app
     labels:
-      app: hello_world_ts
+      app: hello-world-ts
   ports:
     - port: 80
       targetPort: 8080
   type: LoadBalancer
-  LoadBalancerIP: 35.198.202.90
+  LoadBalancerIP: "35.198.202.90"
