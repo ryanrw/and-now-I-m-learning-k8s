@@ -13,43 +13,43 @@ jobs:
           name: test
           command: yarn test
   build_docker_image:
-      environment:
-        DOCKER_IMAGE_NAME: hello_world_ts
-      docker:
-        - image: google/cloud-sdk
-      steps:
-        - checkout
-        - setup_remote_docker
-        - run:
-            name: decode pre-environment data to json file.
-            command: echo $GCLOUD_SERVICE_KEY | base64 --decode > /tmp/gcloud-key.json
-        - run:
-            name: authenticate with json key file.
-            command: |
-              gcloud auth activate-service-account --key-file /tmp/gcloud-key.json
-              gcloud config set project $GCP_PROJECT_NAME
-              gcloud config set compute/zone asia-southeast1-a
-        - run:
-            name: authenticate docker for pushing image
-            command: |
-              gcloud auth configure-docker
-        - run:
-            name: build docker image
-            command: docker build -t $DOCKER_IMAGE_NAME .
-        - run:
-            name: get version from package.json
-            command: |
-              echo "export PACKAGE_VERSION=$(cat package.json | grep version | cut -d " " -f 4 | sed 's/[",]//g')" >> $BASH_ENV
-              source $BASH_ENV
-        - run:
-            name: add a docker tag to local image
-            command: |
-              docker tag \
-              $DOCKER_IMAGE_NAME:latest \
-              gcr.io/$GCP_PROJECT_ID/hello-world-ts:${PACKAGE_VERSION}
-        - run:
-            name: push image
-            command: docker push gcr.io/$GCP_PROJECT_ID/hello-world-ts:${PACKAGE_VERSION}
+    environment:
+      DOCKER_IMAGE_NAME: hello_world_ts
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: decode pre-environment data to json file.
+          command: echo $GCLOUD_SERVICE_KEY | base64 --decode > /tmp/gcloud-key.json
+      - run:
+          name: authenticate with json key file.
+          command: |
+            gcloud auth activate-service-account --key-file /tmp/gcloud-key.json
+            gcloud config set project $GCP_PROJECT_NAME
+            gcloud config set compute/zone asia-southeast1-a
+      - run:
+          name: authenticate docker for pushing image
+          command: |
+            gcloud auth configure-docker
+      - run:
+          name: build docker image
+          command: docker build -t $DOCKER_IMAGE_NAME .
+      - run:
+          name: get version from package.json
+          command: |
+            echo "export PACKAGE_VERSION=$(cat package.json | grep version | cut -d " " -f 4 | sed 's/[",]//g')" >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: add a docker tag to local image
+          command: |
+            docker tag \
+            $DOCKER_IMAGE_NAME:latest \
+            gcr.io/$GCP_PROJECT_ID/hello-world-ts:${PACKAGE_VERSION}
+      - run:
+          name: push image
+          command: docker push gcr.io/$GCP_PROJECT_ID/hello-world-ts:${PACKAGE_VERSION}
 
 workflows:
   version: 2
