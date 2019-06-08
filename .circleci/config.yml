@@ -68,7 +68,7 @@ jobs:
           command: |
             cd kubernates/
             kubectl apply -f deployment.yml
-            kubectl rollout status deployment/hello-world-ts
+            kubectl rollout status deployment/hello_world_ts
       
 workflows:
   version: 2
@@ -82,6 +82,13 @@ workflows:
           context: gcloud credential
           requires:
             - server_test
+          filters:
+            branches:
+              only: master
+      - deploy_to_k8s:
+          context: gcloud credential
+          requires:
+            - build_docker_image
           filters:
             branches:
               only: master
