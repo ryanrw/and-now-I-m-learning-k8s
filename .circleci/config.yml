@@ -27,8 +27,8 @@ jobs:
           name: authenticate with json key file.
           command: |
             gcloud auth activate-service-account --key-file /tmp/gcloud-key.json
-            gcloud config set project $GCP_PROJECT_NAME
-            gcloud config set compute/zone asia-southeast1-a
+            gcloud --quiet config set project $GCP_PROJECT_NAME
+            gcloud --quiet config set compute/zone asia-southeast1-a
       - run:
           name: authenticate docker for pushing image
           command: |
@@ -57,12 +57,11 @@ jobs:
           name: authenticate with json key file.
           command: |
             gcloud auth activate-service-account --key-file /tmp/gcloud-key.json
-            gcloud config set project $GCP_PROJECT_NAME
-            gcloud config set compute/zone asia-southeast1-a
+            gcloud --quiet config set project $GCP_PROJECT_NAME
+            gcloud --quiet config set compute/zone asia-southeast1-a
       - run:
           name: apply deployment and service
           command: |
-            cd kubernates/
             kubectl apply -f deployment.yml
             kubectl rollout status deployment/hello_world_ts
       
