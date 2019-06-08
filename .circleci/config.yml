@@ -27,7 +27,7 @@ jobs:
           name: authenticate with json key file.
           command: |
             gcloud auth activate-service-account --key-file /tmp/gcloud-key.json
-            gcloud --quiet config set project $GCP_PROJECT_NAME
+            gcloud --quiet config set project $GCP_PROJECT_ID
             gcloud --quiet config set compute/zone asia-southeast1-a
       - run:
           name: authenticate docker for pushing image
@@ -57,7 +57,7 @@ jobs:
           name: authenticate with json key file.
           command: |
             gcloud auth activate-service-account --key-file /tmp/gcloud-key.json
-            gcloud --quiet config set project $GCP_PROJECT_NAME
+            gcloud --quiet config set project $GCP_PROJECT_ID
             gcloud --quiet config set compute/zone asia-southeast1-a
             gcloud --quiet container clusters get-credentials test-cluster
       - run:
