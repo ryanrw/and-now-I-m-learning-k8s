@@ -60,10 +60,6 @@ jobs:
             gcloud config set project $GCP_PROJECT_NAME
             gcloud config set compute/zone asia-southeast1-a
       - run:
-          name: install kubectl
-          command: |
-            gcloud components install kubectl
-      - run:
           name: apply deployment and service
           command: |
             cd kubernates/
