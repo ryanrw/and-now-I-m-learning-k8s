@@ -28,8 +28,7 @@ metadata:
     app: hello-world-ts
 spec:
   selector:
-    matchLabels:
-      app: hello-world-ts
+    app: hello-world-ts
   ports:
     - port: 80
       targetPort: 8080
