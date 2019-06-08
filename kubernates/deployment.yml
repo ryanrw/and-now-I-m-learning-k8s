@@ -16,6 +16,23 @@ spec:
     spec:
       containers:
         - name: hello-world-ts
-          image: willpower/hello_world_ts:latest
+          image: gcr.io/test-project-242015/hello-world-ts
           ports:
             - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: test-app
+  labels:
+    app: hello-world-ts
+spec:
+  selector:
+    name: test-app
+    labels:
+      app: hello-world-ts
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer
+  LoadBalancerIP: 35.198.202.90
